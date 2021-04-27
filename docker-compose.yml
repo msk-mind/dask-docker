@@ -20,4 +20,13 @@ services:
     hostname: dask-worker
     command: ["dask-worker", "--nprocs", "10", "--nthreads", "1", "tcp://scheduler:8786"]
 
-
+  notebook:
+    build:
+      context: ./base
+      dockerfile: Dockerfile
+    image: mskmind/dask
+    hostname: dask-notebook
+    ports:
+      - "8888:8888"
+    command: ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+        

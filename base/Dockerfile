@@ -51,7 +51,8 @@ COPY prepare.sh /usr/bin/prepare.sh
 
 RUN mkdir /opt/app
 
-#ENTRYPOINT ["python3", "-c", "import bokeh; print (bokeh.__version__)"]
+RUN pip3 install pyspark filehash --upgrade
 
+RUN pip3 install jupyter --upgrade 
 
 ENTRYPOINT ["tini", "-g", "--", "/usr/bin/prepare.sh"]
