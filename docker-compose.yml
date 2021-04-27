@@ -12,7 +12,7 @@ services:
       - "8787:8787"
     command: ["dask-scheduler"]
 
-  worker:
+  worker_a:
     build:
       context: ./base
       dockerfile: Dockerfile
@@ -20,7 +20,17 @@ services:
       - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
     image: mskmind/dask
     hostname: dask-worker
-    command: ["dask-worker", "--nprocs", "10", "--nthreads", "1", "--memory-limit", "0.1", "tcp://scheduler:8786"]
+    command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "0.1", "tcp://scheduler:8786"]
+
+  worker_b:
+    build:
+      context: ./base
+      dockerfile: Dockerfile
+    volumes:
+      - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
+    image: mskmind/dask
+    hostname: dask-worker
+    command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "0.1", "tcp://scheduler:8786"]
 
   notebook:
     build:
