@@ -18,6 +18,12 @@ A helper docker-compose file is provided to test functionality.
 docker-compose up
 ```
 
+If you want to scale to 4 workers:
+```
+docker-compose up --scale worker=4 -d
+```
+
+
 Open the notebook using the URL that is printed by the output so it has the token.
 
 On a new notebook run:
