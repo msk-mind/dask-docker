@@ -12,7 +12,7 @@ services:
       - "8787:8787"
     command: ["dask-scheduler"]
 
-  worker_a:
+  worker:
     build:
       context: ./base
       dockerfile: Dockerfile
@@ -20,17 +20,8 @@ services:
       - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
     image: mskmind/dask
     hostname: dask-worker
-    command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "0.1", "tcp://scheduler:8786"]
+    command: ["dask-worker", "--nprocs", "4", "--nthreads", "1", "--memory-limit", "0.15", "tcp://scheduler:8786"]
 
-  worker_b:
-    build:
-      context: ./base
-      dockerfile: Dockerfile
-    volumes:
-      - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
-    image: mskmind/dask
-    hostname: dask-worker
-    command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "0.1", "tcp://scheduler:8786"]
 
   notebook:
     build:
@@ -38,6 +29,8 @@ services:
       dockerfile: Dockerfile
     image: mskmind/dask
     hostname: dask-notebook
+    environment:
+      - JUPYTER_TOKEN=0b8fda309d0329947e1be2615435a5fef147deaa30b60706
     volumes:
       - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
     ports:
