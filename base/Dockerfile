@@ -1,17 +1,20 @@
-FROM python:3.9.4-buster
+FROM python:3.9.4-slim
 
+RUN apt-get update && apt-get -y install gcc openslide-tools curl tini
+
+# Infrustructure packages
 RUN pip3 install \
-    lz4 \
     click \
-    medpy \
     minio \
     neo4j \
     numpy>=1.9.0 \
     pandas>=1.1.0 \
     pyarrow>=3.0.0 \
-    pytest
+    pyspark
 
+# Speciality packages
 RUN pip3 install \
+    medpy \
     scikit-image \
     itk \
     opencv-python \
@@ -29,30 +32,21 @@ RUN pip3 install \
     seaborn \
     ijson \
     geojson \
-    orjson
+    orjson \
+    filehash \
+    bokeh
 
-RUN pip3 install bokeh --upgrade
+# Exec packages
+RUN pip3 install dask distributed jupyter --upgrade
 
-RUN pip3 install dask distributed --upgrade
-
-RUN apt-get update &&  apt-get -y install gcc && apt-get install -y openslide-tools	
-
-RUN apt-get -y install tini
-
-RUN curl -L -o data-processing.tar.gz https://github.com/msk-mind/data-processing/archive/refs/tags/v0.1.tar.gz
-
-RUN tar xzvf data-processing.tar.gz
+RUN curl -L -o data-processing.tar.gz https://github.com/msk-mind/data-processing/archive/refs/tags/v0.1.tar.gz \
+    && tar xzvf data-processing.tar.gz \
+    && rm data-processing.tar.gz
 
 ENV PYTHONPATH=/data-processing-0.1:$PYTHONPATH
-
-ENV PATH=$PATH
    
 COPY prepare.sh /usr/bin/prepare.sh
 
 RUN mkdir /opt/app
-
-RUN pip3 install pyspark filehash --upgrade
-
-RUN pip3 install jupyter --upgrade 
 
 ENTRYPOINT ["tini", "-g", "--", "/usr/bin/prepare.sh"]
