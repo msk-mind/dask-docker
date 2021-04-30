@@ -23,6 +23,30 @@ If you want to scale to 4 workers:
 docker-compose up --scale worker=4 -d
 ```
 
+## To do a grid deployment using docker swarm
+To run workers in a docker container on a different machine, its easist to use docker networks such that ports are automatically visible to the scheduler.
+
+### On main node…
+docker swarm init --advertise-addr=<your machine's IP>
+
+### On additional worker nodes
+docker swarm join ….
+
+### Check for nodes you added
+docker node ls
+
+### Create overlay network based on swarm network:
+docker network create --driver=overlay --attachable dask-network
+
+### Bring up main services:
+docker-compose -f main/docker-compose.yml up -d
+
+### Start worker service:
+docker stack deploy --compose-file workers/docker-compose.yml grid
+
+### Scale
+docker service scale grid_worker=10
+
 
 Open the notebook using the URL that is printed by the output so it has the token.
 

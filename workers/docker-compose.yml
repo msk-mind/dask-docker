@@ -1,0 +1,18 @@
+version: "3.1"
+
+services:
+  worker:
+    build:
+      context: ../base
+      dockerfile: Dockerfile
+    volumes:
+      - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
+    image: mskmind/dask
+    hostname: dask-worker
+    networks:
+      - dask-network
+    command: ["dask-worker", "--nprocs", "4", "--nthreads", "1", "--memory-limit", "0.15", "tcp://scheduler:8786"]
+
+networks:
+  dask-network:
+     external: true      
