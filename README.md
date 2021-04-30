@@ -24,9 +24,8 @@ docker-compose up --scale worker=4 -d
 ```
 
 # To do a grid deployment using docker swarm
-```
 To run workers in a docker container on a different machine, its easist to use docker networks such that ports are automatically visible to the scheduler.
-```
+
 On main node…
 ```
 docker swarm init --advertise-addr=<your machine's IP>
