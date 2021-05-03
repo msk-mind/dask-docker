@@ -50,6 +50,8 @@ Start worker service:
 ```
 docker stack deploy --compose-file workers/docker-compose.yml grid
 ```
+This will bring up 3 worker processes, with large, medium, and small definitions having 4, 64; 12, 32; and 16, 16 processes and memory, each; respectively. 
+
 Scale to 3 machines
 ```
 docker service scale grid_worker-large-4=3
