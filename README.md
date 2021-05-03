@@ -50,13 +50,12 @@ Start worker service:
 ```
 docker stack deploy --compose-file workers/docker-compose.yml grid
 ```
-This will bring up 3 worker processes, with large, medium, and small definitions having 4, 64; 12, 32; and 16, 16 processes and memory, each; respectively. 
+This will bring up 3 worker processes, with large and small definitions having 4, 64; and 16, 16; processes and memory, each; respectively. 
 
-Scale to 3 machines
+Scale to e.g., 3 services, or one for each machine in a 3 node cluster
 ```
-docker service scale grid_worker-large-4=3
-docker service scale grid_worker-medium-8=3
-docker service scale grid_worker-small-16=3
+docker service scale grid_worker-large=3
+docker service scale grid_worker-small=3
 ```
 
 Open the notebook using the URL that is printed by the output so it has the token.

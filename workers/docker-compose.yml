@@ -1,7 +1,7 @@
 version: "3.1"
 
 services:
-  worker-large-4:
+  worker-large:
     build:
       context: ../base
       dockerfile: Dockerfile
@@ -13,19 +13,7 @@ services:
       - dask-network
     command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "64GB", "--resources", "size=64", "tcp://scheduler:8786"]
 
-  worker-medium-8:
-    build:
-      context: ../base
-      dockerfile: Dockerfile
-    volumes:
-      - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
-    image: mskmind/dask
-    hostname: dask-worker
-    networks:
-      - dask-network
-    command: ["dask-worker", "--nprocs", "12", "--nthreads", "1", "--memory-limit", "32GB", "--resources", "size=32", "tcp://scheduler:8786"]
-
-  worker-small-16:
+  worker-small:
     build:
       context: ../base
       dockerfile: Dockerfile
