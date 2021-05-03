@@ -32,13 +32,13 @@ docker swarm init --advertise-addr=<your machine's IP>
 ```
 On additional worker nodes
 ```
-docker swarm join ….
+docker swarm join … (using the token and IP)
 ```
 Check for nodes you added
 ```
 docker node ls
 ```
-Create overlay network based on swarm network:
+Create overlay network based on swarm network (on leader node):
 ```
 docker network create --driver=overlay --attachable dask-network
 ```
@@ -50,9 +50,11 @@ Start worker service:
 ```
 docker stack deploy --compose-file workers/docker-compose.yml grid
 ```
-Scale
+Scale to 3 machines
 ```
-docker service scale grid_worker=10
+docker service scale grid_worker-large-4=3
+docker service scale grid_worker-medium-8=3
+docker service scale grid_worker-small-16=3
 ```
 
 Open the notebook using the URL that is printed by the output so it has the token.
@@ -68,7 +70,7 @@ client.ncores()
 It should output something like this:
 
 ```
-{'tcp://172.23.0.4:41269': 4}
+{'tcp://172.23.0.4:41269': 12}
 ```
 
 ## Environment Variables
