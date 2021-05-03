@@ -17,7 +17,7 @@ RUN pip3 install \
     medpy \
     scikit-image \
     itk \
-    opencv-python \
+    opencv-python-headless \
     openslide-python \
     checksumdir \
     pyinstaller>=4.0 \
@@ -34,6 +34,7 @@ RUN pip3 install \
     geojson \
     orjson \
     filehash \
+    dirhash \
     bokeh
 
 # Exec packages
