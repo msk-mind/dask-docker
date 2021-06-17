@@ -1,50 +1,14 @@
-FROM python:3.9.4-slim
+FROM python:3.9.5-slim
 
-RUN apt-get update && apt-get -y install gcc openslide-tools curl tini
+RUN apt-get update && apt-get -y install apt-utils && apt-get -y install gcc openslide-tools curl tini git
 
-# Infrustructure packages
-RUN pip3 install \
-    click \
-    minio \
-    neo4j \
-    numpy>=1.9.0 \
-    pandas>=1.1.0 \
-    pyarrow>=3.0.0 \
-    pyspark
+RUN git clone https://github.com/msk-mind/data-processing.git
 
-# Speciality packages
-RUN pip3 install \
-    medpy \
-    scikit-image \
-    itk \
-    opencv-python-headless \
-    openslide-python \
-    checksumdir \
-    pyinstaller>=4.0 \
-    PyYAML>=5.4 \
-    jsonpath-ng>=1.5.2 \
-    yamale>=3.0.4 \
-    pydicom>=2.1.0 \
-    pyradiomics>=3.0.1 \
-    requests>=2.25.1 \
-    Pillow>=8.1.1 \
-    shapely \
-    seaborn \
-    ijson \
-    geojson \
-    orjson \
-    filehash \
-    dirhash \
-    bokeh
+RUN python -m pip install --upgrade pip && pip install numpy 
 
-# Exec packages
-RUN pip3 install dask distributed jupyter --upgrade
+RUN cd data-processing && pip install -e .
 
-RUN curl -L -o data-processing.tar.gz https://github.com/msk-mind/data-processing/archive/refs/tags/v0.1.tar.gz \
-    && tar xzvf data-processing.tar.gz \
-    && rm data-processing.tar.gz
-
-ENV PYTHONPATH=/data-processing-0.1:$PYTHONPATH
+RUN pip install dask distributed jupyter bokeh --upgrade
    
 COPY prepare.sh /usr/bin/prepare.sh
 

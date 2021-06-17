@@ -1,18 +1,31 @@
 version: "3.1"
 
 services:
-  scheduler:
+  job-scheduler:
     build:
       context: ../base
       dockerfile: Dockerfile
     image: mskmind/dask
-    hostname: dask-scheduler 
+    hostname: job-scheduler 
     networks: 
       - dask-network
     ports:
       - "8786:8786"
       - "8787:8787"
-    command: ["dask-scheduler"]
+    command: ["dask-scheduler", "--port=8786", "--dashboard-address=8787"]
+
+  task-scheduler:
+    build:
+      context: ../base
+      dockerfile: Dockerfile
+    image: mskmind/dask
+    hostname: task-scheduler 
+    networks: 
+      - dask-network
+    ports:
+      - "8788:8788"
+      - "8789:8789"
+    command: ["dask-scheduler", "--port=8788", "--dashboard-address=8789"]
 
   notebook:
     build:
@@ -23,12 +36,13 @@ services:
     networks: 
       - dask-network
     environment:
-      - JUPYTER_TOKEN=0b8fda309d0329947e1be2615435a5fef147deaa30b60706
+      - JUPYTER_TOKEN=123
     volumes:
       - /gpfs/mskmind_ess/data/:/gpfs/mskmind_ess/data/
     ports:
       - "8888:8888"
     command: ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+
 
 networks:
   dask-network:

@@ -46,10 +46,6 @@ Bring up main services:
 ```
 docker-compose -f main/docker-compose.yml up -d
 ```
-Bring up worker service to test:
-```
-docker-compose -f workers/docker-compose.yml up
-```
 Start worker service:
 ```
 docker stack deploy --compose-file workers/docker-compose.yml grid

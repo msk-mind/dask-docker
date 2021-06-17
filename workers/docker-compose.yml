@@ -1,7 +1,7 @@
 version: "3.1"
 
 services:
-  worker-large:
+  job-worker:
     build:
       context: ../base
       dockerfile: Dockerfile
@@ -11,9 +11,9 @@ services:
     hostname: dask-worker
     networks:
       - dask-network
-    command: ["dask-worker", "--nprocs", "8", "--nthreads", "1", "--memory-limit", "64GB", "--resources", "size=64", "tcp://scheduler:8786"]
+    command: ["dask-worker", "--nprocs", "4", "--nthreads", "1", "tcp://job-scheduler:8786"]
 
-  worker-small:
+  task-worker:
     build:
       context: ../base
       dockerfile: Dockerfile
@@ -23,7 +23,7 @@ services:
     hostname: dask-worker
     networks:
       - dask-network
-    command: ["dask-worker", "--nprocs", "16", "--nthreads", "1", "--memory-limit", "16GB", "--resources", "size=16", "tcp://scheduler:8786"]
+    command: ["dask-worker", "--nprocs", "4", "--nthreads", "1", "tcp://task-scheduler:8788"]
 
 networks:
   dask-network:
